@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //display result
 
-    resultDisplay.textContent = cardsWon.length;
+    resultDisplay.textContent = "Score:   " + cardsWon.length;
 
     if (cardsWon.length === cardArray.length / 2) {
       resultDisplay.textContent =
