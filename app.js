@@ -52,24 +52,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cardArray.sort(() => 0.5 - Math.random());
 
-  console.log(cardArray);
-
   const grid = document.querySelector(".grid");
   const resultDisplay = document.querySelector("#result");
+  const commentaryDisplay = document.querySelector("#commentary");
   let userGuesses = [];
   let userGuessesID = [];
   let cardsWon = [];
+  let first = true;
 
   //create the board
 
   function setUpBoard(){
-    for (let i = 0; i < cardArray.length; i++) {
-      let card = document.createElement("img");
 
-      card.setAttribute("src", "images/blankSquare.png");
-      card.setAttribute("id", i);
-      card.addEventListener("click", flipcard);
-      grid.appendChild(card);
+    if(first){
+
+      first = false;
+
+      for (let i = 0; i < cardArray.length; i++) {
+        let card = document.createElement("img");
+        card.setAttribute("src", "images/blankSquare.png");
+        card.setAttribute("id", i);
+        card.addEventListener("click", flipcard);
+        grid.appendChild(card);
+
+      }
+    } else {
+   
+      let cards = document.querySelectorAll("img");
+      cardsWon = [];
+      resultDisplay.textContent = "";
+      commentaryDisplay.textContent = "";
+      cardArray.sort(() => 0.5 - Math.random());
+
+      for(let j = 0; j < cards.length; j++){
+        cards[j].setAttribute("src", "images/blankSquare.png");
+        cards[j].setAttribute("id", j);
+      }
     }
   };
 
@@ -82,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const optionTwoId = userGuessesID[1];
 
     if (userGuesses[0] === userGuesses[1]) {
-      alert("You found a match!");
+      commentaryDisplay.textContent = "You found a match!"
       cards[optionOneId].setAttribute("src", "images/whiteSquare.png");
       cards[optionTwoId].setAttribute("src", "images/whiteSquare.png");
       cardsWon.push(userGuesses);
@@ -109,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //flip card - get the event details on click, push the name of the card guessed into the user guesses array
 
   function flipcard() {
+    commentaryDisplay.textContent = "";
     let cardId = this.getAttribute("id");
 
     userGuesses.push(cardArray[cardId].name);
@@ -119,6 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(checkForMatch, 500);
     }
   }
+
+  let resetButton = document.querySelector("#reset");
+  resetButton.addEventListener("click", setUpBoard);
 
   setUpBoard();
 });
